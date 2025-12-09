@@ -77,6 +77,29 @@ app.get("/meetup/:meetupTitle", async (req, res) => {
   }
 });
 
+async function getMeetupDataByMeetupId (meetupId){
+   try {
+    const meetup = await Meetup.findById(meetupId)
+    return meetup;
+  } catch (error) {
+    throw error;
+  }
+}
+
+app.get("/meetup/Id/:meetupId", async (req, res) => {
+  try {
+    const meetup = await getMeetupDataByMeetupId( req.params.meetupId);
+    if(meetup){
+      res.status(201).json({ message: "Meetup Data upload successfully", data: meetup });
+    }else{
+      res.status(404).json({error: "failed to some meetup Data"})
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch the meetup Data" });
+  }
+});
+
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log("Server is running on this", PORT);
